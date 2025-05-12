@@ -1,8 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Multiple Excel Tables</title>
+  <title>MasabTank</title>
   <style>
+
+   @page {
+    size: A4;
+    margin: 1cm;
+  }  
+
     body {
       font-family: Arial, sans-serif;
       margin: 20px;
@@ -15,12 +21,10 @@
       flex-wrap: wrap;
     }
 
-    .table-container {
-      min-width: 400px;
-    }
+   
 
     .items-table {
-      flex: 3;
+      flex: 2;
     }
 
     .expenses-table {
@@ -29,20 +33,24 @@
 
     table {
       border-collapse: collapse;
-      width: 100%;
     }
 
     th, td {
       border: 1px solid #ccc;
       padding: 0;
-      height: 30px;
+      height: 0px;
     }
+
+    tr {
+      height: 0;
+    }
+
 
     input {
       width: 100%;
       height: 100%;
       border: none;
-      padding: 5px;
+      padding: 1.5px;
       text-align: center;
       font-size: 14px;
       font-family: inherit;
@@ -84,7 +92,7 @@
           <th>TR</th>
           <th>Total</th>
           <th>TB</th>
-          <th>T sale</th>
+          <th>T S</th>
           <th>Total Amount</th>
         </tr>
       </thead>
@@ -99,19 +107,19 @@
     <tbody id="damaged-ps">
       <tr>
 	<td>Total</td>
-        <td><input type="number" oninput="damagedPS()" /></td>
+        <td id ="grand-total-cell" style="text-align: left;">0</td>
       </tr>
       <tr>
 	<td>Damaged</td>
-        <td><input type="number" oninput="damagedPS()" /></td>
+        <td><input type="number" oninput="damagedPS()" id="damaged-cell"/></td>
       </tr>
       <tr>
 	<td>PS</td>
-        <td><input type="number" oninput="damagedPS()" /></td>
+        <td><input type="number" oninput="damagedPS()" id="PS-cell"/></td>
       </tr>
       <tr>
         <th>Total:</th>
-        <td id="damagedps-table-total" style="text-align: center;">0</td>
+        <td id="damagedps-table-total" style="text-align: left;">0</td>
       </tr>
     </tbody>
   </table>
@@ -133,7 +141,7 @@
       <tr>
         <td></td>
         <th>Total:</th>
-        <td id="Tea-coffee-table-total" style="text-align: center;">0</td>
+        <td id="Tea-coffee-table-total" style="text-align: left;">0</td>
       </tr>
     </tbody>
   </table>
@@ -144,28 +152,51 @@
   </div>
 
   <div class="table-container expenses-table">
-    <h3>Expenditure</h3>
-    <table id="expenditure-table">
-      <tr><th>Salary</th><td><input type="number" oninput="calculateExpenditure()" /></td></tr>
-      <tr><th>Bills</th><td><input type="number" oninput="calculateExpenditure()" /></td></tr>
-      <tr><th>Wages</th><td><input type="number" oninput="calculateExpenditure()" /></td></tr>
-      <tr><th></th><td><input type="number" oninput="calculateExpenditure()" /></td></tr>
-      <tr><th></th><td><input type="number" oninput="calculateExpenditure()" /></td></tr>
-      <tr><th>Total</th><td><input type="number" id="expenditure-total" readonly /></td></tr>
-    </table>
+    <table id="expenditure-table" style ="margin-top: 54px;">
+    <th >Expenditure</th>
+    <tr><td>1. Wages</td><td><input type="number" oninput="calculateExpenditure()" /></td></tr>
+    <tr><td>2. Bakery</td><td><input type="number" oninput="calculateExpenditure()" /></td></tr>
+    <tr><td>3. Milk</td><td><input type="number" oninput="calculateExpenditure()" /></td></tr>
+    <tr><td>4. Warna,w.cans</td><td><input type="number" oninput="calculateExpenditure()" /></td></tr>
+    <tr><td>5. Butter,raju,change</td><td><input type="number" oninput="calculateExpenditure()" /></td></tr>
+    <tr><td>6. TeaCups, Covers</td><td><input type="number" oninput="calculateExpenditure()" /></td></tr>
+    <tr><td>7. GHMC</td><td><input type="number" oninput="calculateExpenditure()" /></td></tr>
+    <tr><td>8. Auto rent</td><td><input type="number" oninput="calculateExpenditure()" /></td></tr>
+    <tr><td>9. </td><td><input type="number" oninput="calculateExpenditure()" /></td></tr>
+    <tr><td>10. </td><td><input type="number" oninput="calculateExpenditure()" /></td></tr>
+    <tr><td>11. </td><td><input type="number" oninput="calculateExpenditure()" /></td></tr>
+    <tr><td>12. </td><td><input type="number" oninput="calculateExpenditure()" /></td></tr>
+
+    <tr><th>Total</th><td><input type="number" id="expenditure-total" readonly /></td></tr>
+
+    <tr><td>Cash</td><td><input type="number" oninput="calculateExpenditureStep2()" id="cash" /></td></tr>
+    <tr><td></td><td><input type="number" id="sum-total-cash" readonly /></td></tr>
+    
+    <tr><td>C/B</td><td><input type="number" oninput="calculateExpenditureStep2()" id="cash-balance" /></td></tr>
+    <tr><td></td><td><input type="number" id="minus-cash-cb" readonly /></td></tr>
+    
+    <tr><td>Bakery Sale</td><td id="bakery-sale"></td></tr> 
+    <tr><td></td><td><input type="number" id="minus-cash-bakery" readonly /></td></tr>
+    
+    <tr><td>Tea Sale</td><td id="tea-sale"></td></tr> 
+    <tr><td>Final</td><td id="final"></td></tr>
+
+   </table>
   </div>
 </div>
 
 <script>
-  const items = ['V. Samosa', 'Samosa', 'Tea', 'Coffee', 'Dil Thus cardia'];
-  const multipliers = [6, 15, 20, 25, 90];
+  const items = ['Luqmi','Veg Samosa', 'Aloo Samosa','Veg Puff','Egg Puff','Chicken Puff','Tie B','Fine B','Osmania B','Khara B','S.B/MCR/B.R', 'Pastry/CreamR','Donut','Bun','Dilkhush','Veg sandW','ckn SandW','Mini Plum','Cream Bun','M/B,B/M','Tea box','Milk ltrs','water 500ml','water 1l','C/D 250ml','C/D 750ml'];
+  const multipliers = [12,6, 20, 15, 15, 25, 10, 15, 5, 5, 12, 15,15,8,15,25,40,12,15,20,0,0,10,20,20,45];
   const numRows = items.length;
   const tbody = document.getElementById('items-body');
+  let bakerySale=0;
+  let teaSale=0;
 
   for (let i = 0; i < numRows; i++) {
     const tr = document.createElement('tr');
     tr.innerHTML = `
-      <th>${items[i]}</th>
+      <td>${items[i]}</td>
       <td><input type="number" oninput="calculateRow(this)" /></td>
       <td><input type="number" oninput="calculateRow(this)" /></td>
       <td><input type="number" readonly /></td>
@@ -204,16 +235,15 @@ function calculateTotalAmount() {
     const lastCellInput = row.querySelectorAll('input')[5];
     sum += parseFloat(lastCellInput.value) || 0;
   });
-  document.getElementById('grand-total-cell').textContent = sum.toFixed(2);
+  document.getElementById('grand-total-cell').textContent = sum.toFixed(0);
 }
 
 function damagedPS() {
-  const inputs = document.querySelectorAll('#small-table-body tr input[type="number"]:not([readonly])');
-  let sum = 0;
-  inputs.forEach(input => {
-    sum += parseFloat(input.value) || 0;
-  });
-  document.getElementById('damagedps-table-total').textContent = sum.toFixed(2);
+  const total = parseFloat(document.getElementById('grand-total-cell').textContent) || 0;
+  const damaged = parseFloat(document.getElementById('PS-cell').value) || 0;
+  const ps = parseFloat(document.getElementById('damaged-cell').value) || 0;
+  document.getElementById('damagedps-table-total').textContent = total- damaged- ps;
+  bakerySale= total- damaged- ps
 }
 
 function updateTeaCoffeeTotals() {
@@ -234,6 +264,8 @@ function updateTeaCoffeeTotals() {
   });
 
   document.getElementById('Tea-coffee-table-total').textContent = sum.toFixed(0);
+  teaSale = sum.toFixed(0);
+  
 }
 
 
@@ -245,7 +277,29 @@ function updateTeaCoffeeTotals() {
       total += parseFloat(input.value) || 0;
     });
     document.getElementById('expenditure-total').value = total;
+    calculateExpenditureStep2();
   }
+
+function calculateExpenditureStep2() {
+    const total = parseFloat(document.getElementById('expenditure-total').value) || 0;
+    const cash = parseFloat(document.getElementById('cash').value) || 0;
+    const cb = parseFloat(document.getElementById('cash-balance').value) || 0;
+    const bakeryS = parseFloat(document.getElementById('damagedps-table-total').textContent) || 0;
+
+    const sumCash = total + cash;
+    const minusCB = sumCash - cb;
+    const minusBakery = minusCB - bakeryS;
+
+    document.getElementById('sum-total-cash').value = sumCash;
+    document.getElementById('minus-cash-cb').value = minusCB;
+    document.getElementById('minus-cash-bakery').value = minusBakery;
+    document.getElementById('bakery-sale'). textContent = bakerySale;
+    document.getElementById('tea-sale'). textContent = teaSale;
+    document.getElementById('final'). textContent = teaSale-minusBakery;
+
+
+  }
+
 </script>
 
 </body>
